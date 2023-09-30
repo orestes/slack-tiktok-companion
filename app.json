@@ -1,0 +1,24 @@
+{
+  "name": "slck-tiktok-companion",
+  "logo": "https://github.com/orestes/slack-tiktok-companion/blob/master/slack-tiktok-companion-logo.png?raw=true",
+  "description": "An HTTP Webhook to unfurl TikTok links",
+  "repository": "https://github.com/orestes/slack-tiktok-companion",
+  "keywords": ["github", "webhooks", "slack", "tiktok"],
+  "scripts": {
+    "postdeploy": "npm install"
+  },
+  "success_url": "/",
+  "image": "heroku/nodejs",
+  "env": {
+    "SLACK_BOT_TOKEN": {
+      "description": "The Slack app bot user token",
+      "value": "",
+      "required": true
+    },
+    "SLACK_APP_TOKEN": {
+      "description": "The Slack app token",
+      "value": "",
+      "required": true
+    }
+  }
+}
