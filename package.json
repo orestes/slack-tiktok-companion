@@ -1,7 +1,7 @@
 {
   "name": "tiktok-slack-companion",
   "version": "0.0.1",
-  "module": "src/server.js",
+  "module": "dist/main.js",
   "devDependencies": {
     "@types/node": "^20.8.0",
     "prettier": "^3.0.3",
@@ -15,7 +15,7 @@
     "build": "tsc",
     "tcheck": "tsc --noEmit",
     "tdd": "jest --watch",
-    "start": "node src/main.js",
+    "start": "node dist/main.js",
     "predev": "npm run build",
     "dev": "node --env-file=.env dist/main.js",
     "tunnel": "npx localtunnel --port 3000 --subdomain tiktok-companion"
