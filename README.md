@@ -2,6 +2,12 @@
 
 A Slack App providing a better TikTok integration
 
+# Demo
+
+Before|After
+-|-
+<img src="demo/before.png" alt="Before" />|<img src="demo/after.png" alt="After" />
+
 # Features
 
 - [x] Display the thumbnail for TikTok links in chat
