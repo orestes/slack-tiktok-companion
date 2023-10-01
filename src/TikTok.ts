@@ -1,4 +1,4 @@
-import { default as axios } from "axios";
+import { AxiosError, default as axios } from "axios";
 import { LinkSharedEvent } from "@slack/bolt";
 
 const CHROME_WINDOWS_UA =
@@ -74,7 +74,14 @@ async function getOEmbedInfo(url: URL) {
 
     return response.data;
   } catch (e) {
-    console.error("Request to TikTok OEmbed failed", e);
+    console.error("Request to TikTok OEmbed failed", {
+      request: (e as AxiosError).request?.headers,
+      response: {
+        status: (e as AxiosError).response?.status,
+        data: (e as AxiosError).response?.data,
+        headers: (e as AxiosError).response?.headers,
+      },
+    });
 
     throw new Error("TikTok request failed");
   }
@@ -95,7 +102,14 @@ async function getPathWithId(shortenedUrl: URL): Promise<string> {
     // And the look at the last URL we got redirected to
     return response.request.path;
   } catch (e) {
-    console.error("Request to TikTok short url failed", e);
+    console.error("Request to TikTok short url failed", {
+      request: (e as AxiosError).request?.headers,
+      response: {
+        status: (e as AxiosError).response?.status,
+        data: (e as AxiosError).response?.data,
+        headers: (e as AxiosError).response?.headers,
+      },
+    });
 
     throw new Error("TikTok request failed");
   }
