@@ -1,14 +1,21 @@
 import { default as axios } from "axios";
+import { LinkSharedEvent } from "@slack/bolt";
 
 const CHROME_WINDOWS_UA =
   "Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36";
 
-export async function unfurl(event) {
+export type OEmbedInfo = {
+  author_name: string;
+  title: string;
+  thumbnail_url: string;
+  provider_name: string;
+};
+export async function unfurl(event: LinkSharedEvent) {
   // This field will always be present otherwise the link_shared event could not have been triggered
-  const unfurl_id = event.unfurl_id;
+  const unfurl_id = event.unfurl_id!;
 
   // Will always have at least one event, otherwise the link_shared event could not have been triggered
-  const url = event.links[0].url;
+  const url = new URL(event.links[0].url);
 
   const info = await getTikTokInfo(url);
 
@@ -16,12 +23,12 @@ export async function unfurl(event) {
   return getResponse(unfurl_id, url, info);
 }
 
-async function getResponse(unfurl_id, url, info) {
+async function getResponse(unfurl_id: string, url: URL, info: OEmbedInfo) {
   return {
     unfurl_id,
-    source: "conversations_history",
+    source: "conversations_history" as const,
     unfurls: {
-      [url]: {
+      [url.toString()]: {
         blocks: [
           {
             type: "section",
@@ -41,26 +48,27 @@ async function getResponse(unfurl_id, url, info) {
   };
 }
 
-async function getTikTokInfo(shortenedUrl) {
+async function getTikTokInfo(shortenedUrl: URL) {
   const pathWithId = await getPathWithId(shortenedUrl);
 
   if (!pathWithId) {
     throw new Error("Could not find path with ID");
   }
 
-  const fullUrl = `https://www.tiktok.com/${pathWithId}`;
+  const fullUrl = new URL(`https://www.tiktok.com/${pathWithId}`);
 
   return await getOEmbedInfo(fullUrl);
 }
 
-async function getOEmbedInfo(url) {
-  const oEmbedUrl = `https://www.tiktok.com/oembed?url=${url}`;
+async function getOEmbedInfo(url: URL) {
+  const oEmbedUrl = new URL(`https://www.tiktok.com/oembed?url=${url}`);
 
   try {
-    const response = await axios.get(oEmbedUrl, {
+    const response = await axios.get(oEmbedUrl.toString(), {
       maxRedirects: 1,
       headers: {
         "User-Agent": CHROME_WINDOWS_UA,
+        Accept: "*/*",
       },
     });
 
@@ -72,14 +80,15 @@ async function getOEmbedInfo(url) {
   }
 }
 
-async function getPathWithId(shortenedUrl) {
+async function getPathWithId(shortenedUrl: URL): Promise<string> {
   // AXIOS hangs up on head requests since they have no response body
   // Instead we allow 1 redirect (via the `Location` HTTP Header)
   try {
-    const response = await axios.head(shortenedUrl, {
+    const response = await axios.head(shortenedUrl.toString(), {
       maxRedirects: 1,
       headers: {
         "User-Agent": CHROME_WINDOWS_UA,
+        Accept: "*/*",
       },
     });
 
