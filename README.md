@@ -1,14 +1,23 @@
 # tiktok-companion
 
-A Slack App to provide a better TikTok integration
-
-## Deploy to Heroku
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+A Slack App providing a better TikTok integration
 
 # Features
 
-- [ ] Watch TikTok videos linked in Slack with a single click
+- [x] Display the thumbnail for TikTok links in chat
+- [ ] Thumbnail link is clickable
+
+# Configuration
+
+Create a Slack app using the following scopes:
+
+- link_shared
+
+
+Variable|Source
+-|-
+SLACK_BOT_TOKEN|_Slack Bot User OAuth Token_ in Slack App / OAuth settings
+SLACK_APP_SECRET|_App signing secret_ Slack App / General settings
 
 # Stack
 
@@ -18,9 +27,10 @@ A Slack App to provide a better TikTok integration
 
 ## Developer Experience
 
-- editorconfig
+- TypeScript
+- EditorConfig
 - prettier
-- husky
+- Husky
 - lint-staged
 - commit-lint
-- changelog automation with semver + conventional changelog
+- Changelog automation with semver + conventional changelog
