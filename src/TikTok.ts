@@ -1,4 +1,4 @@
-import { AxiosError, default as axios } from "axios";
+import { AxiosError, AxiosRequestConfig, default as axios } from "axios";
 import { LinkSharedEvent } from "@slack/bolt";
 
 const CHROME_WINDOWS_UA =
@@ -64,14 +64,7 @@ async function getOEmbedInfo(url: URL) {
   const oEmbedUrl = new URL(`https://www.tiktok.com/oembed?url=${url}`);
 
   try {
-    const response = await axios.get(oEmbedUrl.toString(), {
-      headers: {
-        "User-Agent": CHROME_WINDOWS_UA,
-        Accept: "*/*",
-        "Accept-Encoding": null,
-        "Content-Type": null,
-      },
-    });
+    const response = await axios.get(oEmbedUrl.toString());
 
     return response.data;
   } catch (e) {
@@ -85,15 +78,7 @@ async function getPathWithId(shortenedUrl: URL): Promise<string> {
   // AXIOS hangs up on head requests since they have no response body
   // Instead we allow 1 redirect (via the `Location` HTTP Header)
   try {
-    const response = await axios.head(shortenedUrl.toString(), {
-      maxRedirects: 1,
-      headers: {
-        "User-Agent": CHROME_WINDOWS_UA,
-        Accept: "*/*",
-        "Accept-Encoding": null,
-        "Content-Type": null,
-      },
-    });
+    const response = await axios.head(shortenedUrl.toString());
 
     // And the look at the last URL we got redirected to
     return response.request.path;
