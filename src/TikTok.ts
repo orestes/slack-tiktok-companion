@@ -65,7 +65,6 @@ async function getOEmbedInfo(url: URL) {
 
   try {
     const response = await axios.get(oEmbedUrl.toString(), {
-      maxRedirects: 1,
       headers: {
         "User-Agent": CHROME_WINDOWS_UA,
         Accept: "*/*",
@@ -75,7 +74,9 @@ async function getOEmbedInfo(url: URL) {
     return response.data;
   } catch (e) {
     console.error("Request to TikTok OEmbed failed", {
-      request: (e as AxiosError).request?.headers,
+      request: {
+        headers: (e as AxiosError).request?.headers,
+      },
       response: {
         status: (e as AxiosError).response?.status,
         data: (e as AxiosError).response?.data,
@@ -83,7 +84,9 @@ async function getOEmbedInfo(url: URL) {
       },
     });
 
-    throw new Error("TikTok request failed");
+    console.error((e as AxiosError).toJSON());
+
+    throw new Error("TikTok OEmbed request failed");
   }
 }
 
@@ -96,6 +99,7 @@ async function getPathWithId(shortenedUrl: URL): Promise<string> {
       headers: {
         "User-Agent": CHROME_WINDOWS_UA,
         Accept: "*/*",
+        "Accept-Encoding": null,
       },
     });
 
@@ -103,7 +107,9 @@ async function getPathWithId(shortenedUrl: URL): Promise<string> {
     return response.request.path;
   } catch (e) {
     console.error("Request to TikTok short url failed", {
-      request: (e as AxiosError).request?.headers,
+      request: {
+        headers: (e as AxiosError).request?.headers,
+      },
       response: {
         status: (e as AxiosError).response?.status,
         data: (e as AxiosError).response?.data,
@@ -111,6 +117,8 @@ async function getPathWithId(shortenedUrl: URL): Promise<string> {
       },
     });
 
-    throw new Error("TikTok request failed");
+    console.error((e as AxiosError).toJSON());
+
+    throw new Error("TikTok short url request failed");
   }
 }
