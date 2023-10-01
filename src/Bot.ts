@@ -5,11 +5,10 @@ const EVENT_LINK_SHARED = "link_shared";
 
 export class Bot {
   private app: App;
-  public constructor(botToken: string, appToken: string) {
+  public constructor(botToken: string, appSecret: string) {
     const app = new App({
-      appToken: appToken,
       token: botToken,
-      socketMode: true,
+      signingSecret: appSecret,
     });
 
     app.event(EVENT_LINK_SHARED, this.handleLinkShared.bind(this) as any);

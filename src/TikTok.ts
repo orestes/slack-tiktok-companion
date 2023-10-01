@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig, default as axios } from "axios";
+import { AxiosError, default as axios } from "axios";
 import { LinkSharedEvent } from "@slack/bolt";
 
 const CHROME_WINDOWS_UA =
