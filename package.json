@@ -15,7 +15,6 @@
     "build": "tsc",
     "tcheck": "tsc --noEmit",
     "tdd": "jest --watch",
-    "prestart": "npm run build",
     "start": "node src/main.js",
     "predev": "npm run build",
     "dev": "node --env-file=.env dist/main.js",
